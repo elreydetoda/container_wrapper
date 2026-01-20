@@ -1,7 +1,44 @@
-# Service Wrapper
-The `service_wrapper` payload is a special payload. This is a .NET 3.5/4.0 service executable that acts as a "wrapper" around another agent. As such, this payload type has no commands and no supported C2 profiles - it simply acts as a way to turn arbitrary other agents into properly formatted Windows Service Executables.
+# Container Wrapper
+The `container_wrapper` payload is a special payload. This is a OCI compliant container image (i.e. `.tar` file) that acts as a "wrapper" around another agent. As such, this payload type has no commands and no supported C2 profiles - it simply acts as a way to turn arbitrary other Linux agents into properly format container images and set them as the initial startup command.
 
 This payload type is for Mythic 2.2.7 and reports as version "8". It is not compatible with Mythic version 2.1.
+
+## Additional modification
+
+```console
+$ mv -v docker-compose.yml{,.orig00}
+# https://chatgpt.com/share/696fa368-5a04-8005-ab5a-4673b140fb48
+$ cat docker-compose.yml.orig00 | yq '
+  .services.container_wrapper.environment |=
+    ((. // []) + [
+      "STORAGE_DRIVER=vfs",
+      "BUILDAH_ISOLATION=chroot",
+      "_CONTAINERS_USERNS_CONFIGURED=1"
+    ] | unique)
+  |
+  .services.container_wrapper.security_opt |=
+    ((. // []) + ["no-new-privileges:true"] | unique)
+  |
+  .services.container_wrapper.tmpfs |=
+    ((. // []) + ["/tmp", "/run"] | unique)
+  |
+  .services.container_wrapper.pids_limit = 256
+' > docker-compose.yml
+# https://chatgpt.com/share/696fa24f-6944-8005-b364-aecc69de9ef2
+$ diff docker-compose.yml{,.orig00}
+151,153d150
+<             - STORAGE_DRIVER=vfs
+<             - BUILDAH_ISOLATION=chroot
+<             - _CONTAINERS_USERNS_CONFIGURED=1
+174,179d170
+<         security_opt:
+<           - no-new-privileges:true
+<         tmpfs:
+<           - /tmp
+<           - /run
+<         pids_limit: 256
+$ docker compose down container_wrapper && sleep 3 && docker compose up container_wrapper -d
+```
 
 ## How to install an agent in this format within Mythic
 
