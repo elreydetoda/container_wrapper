@@ -9,15 +9,15 @@ import base64
 from mythic_container.MythicRPC import *
 
 
-class ServiceWrapper(PayloadType):
+class ContainerWrapper(PayloadType):
 
-    name = "service_wrapper"
+    name = "container_wrapper"
     file_extension = "tar"
     author = "@elreydetoda"
     supported_os = [SupportedOS.Linux]
     wrapper = True
     wrapped_payloads = []
-    note = "This is a wrapper payload that takes in a Linux executable payload and generates a docker container file (i.e. a tar.gz file)."
+    note = "This is a wrapper payload that takes in a Linux executable payload and generates a docker container file (i.e. a tar file)."
     supports_dynamic_loading = False
     build_parameters = [
         BuildParameter(
@@ -46,8 +46,8 @@ class ServiceWrapper(PayloadType):
         )
     ]
     c2_profiles = []
-    agent_path = PurePath(".") / "service_wrapper"
-    agent_icon_path = agent_path / "service_wrapper.svg"
+    agent_path = PurePath(".") / "container_wrapper"
+    agent_icon_path = agent_path / "container_wrapper.svg"
     agent_code_path = agent_path / "agent_code"
     build_steps = [
         BuildStep(step_name="Writing Payload", step_description="Writing payload to temp location"),

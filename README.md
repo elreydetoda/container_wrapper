@@ -1,5 +1,5 @@
-# Service Wrapper
-The `service_wrapper` payload is a special payload. This is a .NET 3.5/4.0 service executable that acts as a "wrapper" around another agent. As such, this payload type has no commands and no supported C2 profiles - it simply acts as a way to turn arbitrary other agents into properly formatted Windows Service Executables.
+# Container Wrapper
+The `container_wrapper` payload is a special payload. This is a OCI compliant container image (i.e. `.tar` file) that acts as a "wrapper" around another agent. As such, this payload type has no commands and no supported C2 profiles - it simply acts as a way to turn arbitrary other Linux agents into properly format container images and set them as the initial startup command.
 
 This payload type is for Mythic 2.2.7 and reports as version "8". It is not compatible with Mythic version 2.1.
 

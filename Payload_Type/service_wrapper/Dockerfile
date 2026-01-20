@@ -1,1 +1,1 @@
-FROM ghcr.io/mythicagents/service_wrapper:v0.0.5
+FROM ghcr.io/elreydetoda/container_wrapper:v0.0.0
