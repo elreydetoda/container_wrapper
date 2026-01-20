@@ -1,5 +1,17 @@
 # Container Wrapper
-The `container_wrapper` payload is a special payload. This is a OCI compliant container image (i.e. `.tar` file) that acts as a "wrapper" around another agent. As such, this payload type has no commands and no supported C2 profiles - it simply acts as a way to turn arbitrary other Linux agents into properly format container images and set them as the initial startup command.
+The `container_wrapper` payload is a special payload. This is a [OCI compliant container image](https://opencontainers.org/about/overview/) (i.e. `.tar` file) that acts as a "wrapper" around another agent.
+As such, this payload type has no commands and no supported C2 profiles - it simply acts as a way to turn arbitrary other Linux agents into properly format container images and set them as the initial startup command.
+
+Once you've obtained the `.tar` file you can use a tool like [skopeo](https://github.com/containers/skopeo) to push that [OCI image](https://github.com/opencontainers/image-spec) into any registry (e.g. Docker's [official registery](https://hub.docker.com/_/registry)) [it supports](https://github.com/containers/skopeo/blob/7c6e1eb524e852336d3f835dc42bcced82a0f99a/README.md#copying-images) with a command like this:
+```console
+$ curl -ko poseidon.tar -fsSL https://127.0.0.1:7443/direct/download/d93eac93-7d7b-4abd-a824-56b65f780036 && skopeo copy --dest-tls-verify=false oci-archive:poseidon.tar docker://localhost:32000/poseidon-000:latest
+Getting image source signatures
+Copying blob cb1c705c276d skipped: already exists  
+Copying blob cbe12f25ca46 done   | 
+Copying config 3f13a43523 done   | 
+Writing manifest to image destination
+$ curl http://localhost:32000/v2/_catalog
+```
 
 This payload type is for Mythic 2.2.7 and reports as version "8". It is not compatible with Mythic version 2.1.
 
