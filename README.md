@@ -42,7 +42,7 @@ $ docker compose down container_wrapper && sleep 3 && docker compose up containe
 
 ### Poseidon specific
 
-Till a PR is merged for Poseidon to allow this payload wrapper to wrap it, you'll also need to modify your poseidon agent's code, re-build the image, & deploy it with that new version.
+Till [this PR](https://github.com/MythicAgents/poseidon/pull/74) is merged for Poseidon to allow this payload wrapper to wrap it, you'll also need to modify your poseidon agent's code, re-build the image, & deploy it with that new version.
 
 ```console
 $ cd /opt/mythic/InstalledServices/poseidon
