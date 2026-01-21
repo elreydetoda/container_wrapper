@@ -15,28 +15,6 @@ $ curl http://localhost:32000/v2/_catalog
 
 This payload type is for Mythic 2.2.7 and reports as version "8". It is not compatible with Mythic version 2.1.
 
-## Additional modification
-### Poseidon specific
-
-Till [this PR](https://github.com/MythicAgents/poseidon/pull/74) is merged for Poseidon to allow this payload wrapper to wrap it, you'll also need to modify your poseidon agent's code, re-build the image, & deploy it with that new version.
-
-```console
-$ cd /opt/mythic/InstalledServices/poseidon
-$ cp -v poseidon/agentfunctions/builder.go{,.orig00}
-'poseidon/agentfunctions/builder.go' -> 'poseidon/agentfunctions/builder.go.orig00'
-$ vim poseidon/agentfunctions/builder.go
-$ diff poseidon/agentfunctions/builder.go{,.orig00}
-43c43
-<       CanBeWrappedByTheFollowingPayloadTypes: []string{"container_wrapper"},
----
->       CanBeWrappedByTheFollowingPayloadTypes: []string{},
-$ docker build . -t ghcr.io/mythicagents/poseidon:v0.0.3.9-alpha
-$ cd /opt/mythic/
-$ vim docker-compose.yml
-# add new image to replace: image: ghcr.io/mythicagents/poseidon:v0.0.3.9 -> image: ghcr.io/mythicagents/poseidon:v0.0.3.9-alpha
-$ docker compose down poseidon && sleep 3 && docker compose up poseidon -d
-```
-
 ## How to install an agent in this format within Mythic
 
 When it's time for you to test out your install or for another user to install your agent, it's pretty simple. Within Mythic you can run the `mythic-cli` binary to install this in one of three ways:
