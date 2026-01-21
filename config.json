@@ -4,5 +4,19 @@
   "exclude_documentation_payload": false,
   "exclude_documentation_c2": false,
   "exclude_agent_icons": false,
-  "remote_images": {}
+  "remote_images": {},
+  "docker-compose": {
+    "tmpfs": [
+      "/run",
+      "/tmp"
+    ],
+    "security_opt": [
+      "no-new-privileges:true"
+    ],
+    "environment": [
+      "STORAGE_DRIVER=vfs",
+      "BUILDAH_ISOLATION=chroot",
+      "_CONTAINERS_USERNS_CONFIGURED=1"
+    ]
+  }
 }
