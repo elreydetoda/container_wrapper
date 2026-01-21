@@ -7,6 +7,7 @@ on:
   # Only run workflow when there is a new release published in Github
   #release:
   #  types: [published]
+  workflow_dispatch:
   push:
     branches:
       - 'master'
