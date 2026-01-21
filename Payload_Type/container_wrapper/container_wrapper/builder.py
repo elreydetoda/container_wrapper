@@ -16,7 +16,7 @@ class ContainerWrapper(PayloadType):
     author = "@elreydetoda"
     supported_os = [SupportedOS.Linux]
     wrapper = True
-    wrapped_payloads = []
+    wrapped_payloads = ["poseidon"]
     note = "This is a wrapper payload that takes in a Linux executable payload and generates a docker container file (i.e. a tar file)."
     supports_dynamic_loading = False
     build_parameters = [
