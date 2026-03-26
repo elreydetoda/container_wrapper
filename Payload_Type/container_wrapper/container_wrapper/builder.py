@@ -43,6 +43,12 @@ class ContainerWrapper(PayloadType):
             parameter_type=BuildParameterType.String,
             default_value="latest",
             description="The version of the container image you want to export",
+        ),
+        BuildParameter(
+            name="insecure_registry",
+            parameter_type=BuildParameterType.Boolean,
+            default_value=False,
+            description="Allow pulling/pushing from HTTP or insecure registries",
         )
     ]
     c2_profiles = []
@@ -72,14 +78,18 @@ class ContainerWrapper(PayloadType):
                     StepStdout="Wrote payload file",
                     StepSuccess=True
                 ))
+                tls_flag = ""
+                if self.get_parameter("insecure_registry"):
+                    tls_flag = "--tls-verify=false "
                 command = [
                     # adding isolation=chroot because running in a container: https://github.com/containers/buildah/issues/1901#issuecomment-539499449
-                    f"newcontainer=$(buildah from --isolation=chroot {self.get_parameter('base_image')})",
+                    f"newcontainer=$(buildah from --isolation=chroot {tls_flag}{self.get_parameter('base_image')})",
                     f"chmod +x {payload_bin}",
                     f"buildah add $newcontainer {payload_bin}",
                     f"buildah config --cmd /{payload_bin.name} $newcontainer",
                     f"buildah commit $newcontainer {self.get_parameter('container_image_name')}:latest",
-                    "buildah push " + 
+                    "buildah push " +
+                        f"{tls_flag}" +
                         f"{self.get_parameter('container_image_name')}:{self.get_parameter('container_image_version')} " +
                         f"oci-archive:{Path(agent_build_path, str(self.get_parameter('container_image_name')) + '.tar')}:{self.get_parameter('container_image_version')}",
                     # "buildah rm $newcontainer",
