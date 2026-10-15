@@ -3,7 +3,7 @@ FROM itsafeaturemythic/mythic_python_base:latest as builder
 COPY [".docker/requirements.txt", "requirements.txt"]
 RUN python3 -m pip wheel --wheel-dir /wheels -r requirements.txt
 
-FROM python:3.11-slim-bullseye
+FROM python:3.11-slim-trixie
 
 RUN apt-get update && apt-get install --no-install-recommends buildah -y \
   && rm -rf /var/lib/apt/lists/* /tmp/*
