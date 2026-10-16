@@ -11,7 +11,8 @@
       "/tmp"
     ],
     "security_opt": [
-      "no-new-privileges:true"
+      "no-new-privileges:true",
+      "seccomp:unconfined"
     ],
     "environment": [
       "STORAGE_DRIVER=vfs",
