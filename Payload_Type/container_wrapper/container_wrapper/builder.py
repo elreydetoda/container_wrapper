@@ -83,12 +83,12 @@ class ContainerWrapper(PayloadType):
                     tls_flag = "--tls-verify=false "
                 command = [
                     # adding isolation=chroot because running in a container: https://github.com/containers/buildah/issues/1901#issuecomment-539499449
-                    f"newcontainer=$(buildah from --isolation=chroot {tls_flag}{self.get_parameter('base_image')})",
+                    f"newcontainer=$(buildah --storage-driver=vfs from --isolation=chroot {tls_flag}{self.get_parameter('base_image')})",
                     f"chmod +x {payload_bin}",
-                    f"buildah add $newcontainer {payload_bin}",
-                    f"buildah config --cmd /{payload_bin.name} $newcontainer",
-                    f"buildah commit $newcontainer {self.get_parameter('container_image_name')}:latest",
-                    "buildah push " +
+                    f"buildah --storage-driver=vfs add $newcontainer {payload_bin}",
+                    f"buildah --storage-driver=vfs config --cmd /{payload_bin.name} $newcontainer",
+                    f"buildah --storage-driver=vfs commit $newcontainer {self.get_parameter('container_image_name')}:latest",
+                    "buildah --storage-driver=vfs push " +
                         f"{tls_flag}" +
                         f"{self.get_parameter('container_image_name')}:{self.get_parameter('container_image_version')} " +
                         f"oci-archive:{Path(agent_build_path, str(self.get_parameter('container_image_name')) + '.tar')}:{self.get_parameter('container_image_version')}",
