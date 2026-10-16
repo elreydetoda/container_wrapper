@@ -12,7 +12,8 @@
     ],
     "security_opt": [
       "no-new-privileges:true",
-      "seccomp:unconfined"
+      "seccomp:unconfined",
+      "apparmor:unconfined"
     ],
     "environment": [
       "STORAGE_DRIVER=vfs",
