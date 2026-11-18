@@ -6,19 +6,6 @@
   "exclude_agent_icons": false,
   "remote_images": {},
   "docker-compose": {
-    "tmpfs": [
-      "/run",
-      "/tmp"
-    ],
-    "security_opt": [
-      "no-new-privileges:true",
-      "seccomp:unconfined",
-      "apparmor:unconfined"
-    ],
-    "environment": [
-      "STORAGE_DRIVER=vfs",
-      "BUILDAH_ISOLATION=chroot",
-      "_CONTAINERS_USERNS_CONFIGURED=1"
-    ]
+    "privileged": true
   }
 }
