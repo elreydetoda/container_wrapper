@@ -26,7 +26,7 @@ class ContainerWrapper(PayloadType):
         )
     ]
     description = "Wraps a Linux x64 ELF payload in an OCI archive."
-    semver = "1.0.0"
+    semver = "0.0.2"
     supports_dynamic_loading = False
     build_parameters = [
         BuildParameter(
