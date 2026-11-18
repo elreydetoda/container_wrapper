@@ -3,9 +3,7 @@ from mythic_container.MythicCommandBase import *
 import asyncio
 import os
 import tempfile
-from distutils.dir_util import copy_tree
 from pathlib import PurePath, Path
-import base64
 from mythic_container.MythicRPC import *
 
 
@@ -16,8 +14,19 @@ class ContainerWrapper(PayloadType):
     author = "@elreydetoda"
     supported_os = [SupportedOS.Linux]
     wrapper = True
-    wrapped_payloads = ["poseidon"]
-    note = "This is a wrapper payload that takes in a Linux executable payload and generates a docker container file (i.e. a tar file)."
+    agent_type = AgentType.Wrapper
+    wrapper_payload_requirements = [
+        WrapperPayloadRequirement(
+            requires=WrapperPayloadRequirementRequires(
+                os=SupportedOS.Linux,
+                architecture=PayloadBuildMetadataArchitecture.X64,
+                format=PayloadBuildMetadataFormat.ELF,
+                payload_type="poseidon",
+            )
+        )
+    ]
+    description = "Wraps a Linux x64 ELF payload in an OCI archive."
+    semver = "1.0.0"
     supports_dynamic_loading = False
     build_parameters = [
         BuildParameter(
@@ -57,7 +66,7 @@ class ContainerWrapper(PayloadType):
     agent_code_path = agent_path / "agent_code"
     build_steps = [
         BuildStep(step_name="Writing Payload", step_description="Writing payload to temp location"),
-        BuildStep(step_name="Building", step_description="Compiling with nuget and msbuild")
+        BuildStep(step_name="Building", step_description="Building and exporting the OCI image with Buildah")
     ]
 
 
@@ -119,6 +128,10 @@ class ContainerWrapper(PayloadType):
                     resp.payload = output_path.read_bytes()
                     resp.status = BuildStatus.Success
                     resp.build_message = f"{stdout=}\n{stderr=}"
+                    resp.build_metadata = PayloadBuildMetadata(
+                        architecture=PayloadBuildMetadataArchitecture.X64,
+                        format="oci",
+                    )
                 else:
                     resp.payload = b""
                     resp.build_stderr = output + "\n" + str(output_path)

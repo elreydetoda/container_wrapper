@@ -143,3 +143,7 @@ _ReSharper*/
 
 # vscode
 .vscode/
+
+# Direct WSL development
+.venv-wsl/
+.uv-cache/

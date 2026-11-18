@@ -13,7 +13,7 @@ Writing manifest to image destination
 $ curl http://localhost:32000/v2/_catalog
 ```
 
-This payload type is for Mythic 2.2.7 and reports as version "8". It is not compatible with Mythic version 2.1.
+This branch supports Mythic 4 only and uses the Mythic v4 wrapper compatibility schema. It accepts Poseidon payloads whose build metadata identifies them as Linux x64 ELF files; incompatible operating systems, architectures, and formats are rejected before the wrapper build starts.
 
 ## How to install an agent in this format within Mythic
 

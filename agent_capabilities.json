@@ -1,14 +1,14 @@
 {
-  "os": ["Windows"],
-  "languages": [".NET Framework"] ,
+  "os": ["Linux"],
+  "languages": ["OCI"] ,
   "features": {
-    "mythic": ["wrapper"],
+    "mythic": ["wrapper", "docker"],
     "custom": []
   },
-  "payload_output": ["service exe"],
+  "payload_output": ["oci"],
   "architectures": ["x86_64"],
   "c2": [],
-  "mythic_version": "3.3",
-  "agent_version": "",
+  "mythic_version": "4.0",
+  "agent_version": "1.0.0",
   "supported_wrappers": []
 }
